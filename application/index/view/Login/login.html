@@ -1,0 +1,135 @@
+<html>
+<head>
+<title>登录页面</title>	
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/index/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/index/css/login.css">
+	<script src="__PUBLIC__/static/index/js/jquery.js"></script>
+	<style>
+		body{
+			background: url('__PUBLIC__/static/index/images/1.jpg');
+			background-size: cover;
+			background-attachment: fixed;
+		}
+		.footer{
+			position: absolute;
+			bottom: 0px;
+			width: 100%;
+		}
+		.row{
+			margin-top: 100px;
+		}
+
+	</style>
+</head>
+
+<body>
+	<div class='container'>
+		<h1 class='page-header' style='color:#fff;font-weight:bold'>用户登录</h1>
+<!--?php
+	require_once 'common.php';
+
+?-->
+		<div class='row'>
+			<div class='col-md-2'></div>
+			<div class='col-md-8' id='content-column' style='padding-top:0px'>
+				<form class='form-horizontal' action='' method='post'>
+					<div class='form-group'>
+						<div class='col-md-3'></div>
+						<div class='col-md-9'>
+							<span id='error' class='label glyphicon glyphicon-warning-sign'>用户名或密码错误</span>
+						</div>
+					</div>
+					<div class='form-group'>
+						<label class='username col-md-3'>用户名：</label>
+						<div class='col-md-9'>
+							<input type='text' class='form-control' placeholder='username' name='username'>							
+						</div>			
+					</div>
+					<div class='form-group'>
+						<label class='password col-md-3'>密&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
+						<div class='col-md-9'>
+							<input type='password' class='form-control' placeholder='password' name='password'>
+						</div>
+					</div>
+					<div class='form-group'>
+						<label class='col-md-3' class='checkcode' style='color:#fff;font-size:20px;'>验证码：</label>
+						<div class='col-md-5'>
+							<input type="text" name="checkcode" class='form-control' placeholder='checkcode'>
+						</div>
+						<div class='col-md-2'><img src="__PUBLIC__/static/index/images/checkCode.php" id='checkCodeImage' onclick="this.src='__PUBLIC__/static/index/images/checkCode.php?a=Math()'"/>
+						</div>
+					</div>
+					<div class='form-group'>
+						<label style='color:#fff;font-size:25px;cursor: pointer;'>
+							&nbsp;&nbsp;<input type='checkbox' name='remember'>&nbsp;&nbsp;Remember me
+						</label>	
+					</div>
+					<div class='form-group'>
+						<div class='col-md-4'>
+							<input type='submit' class='btn btn-success form-control' value='登录'>	
+						</div>
+						<div class='col-md-4' id='fogort'>
+							<a href="">忘记密码？</a>
+						</div>
+					</div>
+					<div class='form-group'>
+						<div class='col-md-4'>
+							<input type='reset' class='btn btn-primary form-control' value='重新填写'>
+						</div>
+						<div class='col-md-4'>
+							<a href="{:url('register/index')}" class='btn btn-danger form-control'>
+								<span class='glyphicon glyphicon-hand-right'>&nbsp;</span>注册
+							</a>
+						</div>	
+					</div>
+				</form>				
+			</div>
+		</div>
+	</div>
+	{include file='Public/foot' /}
+</body>
+<script>
+	function GetErrno(){
+		var url=location.search;//这里返回'?errno=2'
+		if (url.indexOf('?')!=-1) {
+			var index=url.indexOf('?')+1;
+			strs=url.substr(index);//取出？后传递的所有等式
+			str=strs.split('=');
+		}
+		return str[1];//返回errno的值
+	}
+	
+	var errno=GetErrno();
+
+	function CheckErrno(){
+		if (errno==1) {
+			//alert('验证码错误');
+			//alert($('#error').css('visibility'))
+			$('#error').html('验证码错误').css({'visibility':'visible'});
+		}else if (errno==2) {
+			//alert('用户名或者密码错误');
+			$('#error').html('用户名或密码错误').css({'visibility':'visible'});
+		}else if(errno==3){
+			$('#error').html('请重新登录').css({'visibility':'visible'});
+		}
+	}
+
+	CheckErrno();
+	//footer的设置
+    $(window).ready(function(){
+		var right_column_height=document.getElementById('right-column').offsetHeight;
+		var footer_column_height=150;
+		if ((right_column_height+250)>window.innerHeight) {
+			$('footer').removeClass();
+		};	    	
+    })	    
+	$(window).resize(function(){
+		if ((content_column_height+250)>window.innerHeight) {
+			//alert('ads')
+			$('footer').removeClass('footer');
+		}else{
+			$('footer').addClass('footer');
+		}		
+	})
+</script>
+</html>

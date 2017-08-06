@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head><title>个人文章</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/index/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/index/css/article-index.css">
+	<script src="__PUBLIC__/static/index/js/jquery.js"></script>
+	<script src="__PUBLIC__/static/index/js/bootstrap.js"></script>
+	<script src="__PUBLIC__/static/index/js/holder.js"></script>
+	<script src="__PUBLIC__/static/index/js/docs.min.js"></script>
+	<script src="__PUBLIC__/static/index/js/AjaxRequest.js"></script>
+	<style>	
+		/*body*/
+			body{
+				background: url('__PUBLIC__/static/index/images/1.jpg');
+				background-size: cover;
+				background-attachment: fixed;
+			}
+			.footer{				
+				position: fixed;
+				bottom: 0px;
+				width: 100%;
+				clear: both;
+			}
+			.row{
+				margin-top: 80px;
+				margin-bottom:50px;
+			}
+
+	</style>
+</head>
+<body>
+
+	<div class='container'>
+		<!--网页导航条-->
+			{include file='Public/top' /}
+
+		<div class='row' id='content-column'>
+			<h1 class='artlist-heading'>所有文章：</h1>
+			<hr>
+			<!--正文——中间框-->
+			{volist name='artlist' id='vo'}
+			<div class='media artlist'>
+				<div class='media-left'>
+					{if condition="$vo.pic neq ''"}
+					<img src="__PUBLIC__{$vo.pic}" height="100px">
+					{else /}
+					暂无缩略图
+					{/if}
+				</div>
+				<div class='media-body'>
+					<h3 class='media-heading'>
+						<p>
+						<span class='title'>{$vo.title}</span>
+						<a class='full-article' href="{:url('Article/showarticle',array('id'=>$vo.id))}">>>阅读全文</a>
+						</p>
+					</h3>
+					<p class='content'>{$vo.intro}&nbsp;...</p>
+					<p><span class='time label label-info'>{$vo.time|date='Y-m-d H:i:s',###}</span></p>
+				</div>
+			</div>
+			{/volist}
+			<!--相关文章列表
+			<div class='artlist'>
+				<h1 class='artlist-heading'>所有文章：</h1>
+				<hr>
+				{volist name='artlist' id='vo'}
+				<p><a href="{:url('Article/showarticle',array('id'=>$vo.id))}">{$vo.title}</a>（{$vo.time|date='Y-m-d H:i:s',###}）</p>
+
+				{/volist}
+			</div>-->
+		</div>
+	</div>
+	<!--网页页尾-->
+		{include file='Public/foot' /}
+</body>
+<script>
+	$(document).ready(function(){		
+		//alert('asd')
+	})
+	//footer的设置
+	$(document).ready(function(){
+		var content_column_height=document.getElementById('content-column').offsetHeight;
+		var footer_column_height=150;
+		if ((content_column_height+footer_column_height)>window.innerHeight) {
+			$('footer').removeClass();
+		};	 		
+	})
+   
+	$(window).resize(function(){
+		if ((content_column_height+250)>window.innerHeight) {
+			//alert('ads')
+			$('footer').removeClass('footer');
+		}else{
+			$('footer').addClass('footer');
+		}		
+	})	
+</script>
+</html>

@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+<head><title>个人网页</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/index/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/index/css/article-show.css">
+	<script src="__PUBLIC__/static/index/js/jquery.js"></script>
+	<script src="__PUBLIC__/static/index/js/bootstrap.js"></script>
+	<script src="__PUBLIC__/static/index/js/holder.js"></script>
+	<script src="__PUBLIC__/static/index/js/docs.min.js"></script>
+	<script src="__PUBLIC__/static/index/js/AjaxRequest.js"></script>
+	<style>	
+		/*body*/
+			body{
+				background: url('__PUBLIC__/static/index/images/1.jpg');
+				background-size: cover;
+				background-attachment: fixed;
+				/*background-repeat: no-repeat;*/
+				/*background-position: top center;*/
+			}
+			a:hover{
+				font-weight: bold;
+				background: #5A788B;
+				color: #fff;
+			}
+
+			.row{
+				margin-top: 80px;
+				margin-bottom:50px;
+			}
+
+	</style>
+</head>
+<body>
+
+	<div class='container'>
+		<!--网页导航条-->
+			{include file='Public/top' /}
+
+		<div class='row'>
+
+			<!--正文——中间框-->
+			<div class='col-md-12 web-middle' id='right-column'>
+				<!--个人Article信息栏-->
+					<div id='Panel' idx='Article' class='panel' style='margin-top:20px'>
+						<div class='panel-heading' style='background:#8DABAF'>
+							<div class='panel-title'>
+								<h2 style='color:#fff;font-weight:bold'>My Articles</h2>
+							</div>
+						</div>
+						<div class='panel-body'>
+							<!--翻页功能-->
+							<div class='articel-footer'>
+								<div style='text-align:center; padding:10px'>
+									{if condition="$preartres.id neq ''"}
+									上一篇：<a href="{:url('showarticle',array('id'=>$preartres.id))}" style='text-align:center'>{$preartres.title}</a>
+									{else /}
+									没有了
+									{/if}&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+									{if condition="$nextartres.id neq ''"}
+									下一篇：<a href="{:url('showarticle',array('id'=>$nextartres.id))}" style='text-align:center'>{$nextartres.title}</a>
+									{else /}
+									没有了
+									{/if}
+									<a style="float:right" href="{:url('Index/index')}">返回主界面</a>
+								</div>
+							</div>						
+							<div class='panel' style='margin:10px;position:relative'>
+								<div class='panel-heading article-heading'>
+									<div class='panel-title article-title'>
+										<h4>{$artres.title}<span style='float:right'>{$artres.time|date='Y年m月d日',###}</span></h4>
+									</div>
+								</div>
+								<div class='panel-body article-content'>
+									{$artres.content}
+									{if condition="$artres.pic neq '' "}
+									<img class='article-pic' src="__PUBLIC__{$artres.pic}"  width='100%'>
+									{/if}
+								</div>
+
+							</div>
+							<!--相关文章列表-->
+							<div class='artlist'>
+								<p class='artlist-heading'>相关文章：</p>
+								{volist name='artlist' id='vo'}
+								<p><a href="{:url('Article/showarticle',array('id'=>$vo.id))}">{$vo.title}</a>（{$vo.time|date='Y-m-d H:i:s',###}）</p>
+
+								{/volist}
+							</div>
+						</div>
+
+					</div>
+
+
+			</div>
+		</div>
+
+	</div>
+	<!--网页页尾-->
+		{include file='Public/foot' /}
+</body>
+<script>
+	$(document).ready(function(){		
+		//alert('asd')
+	})
+	//回到顶部
+		$('.top').click(function(){
+			$(window).scrollTop(0);
+		})
+    $(window).ready(function(){
+		var right_column_height=document.getElementById('right-column').offsetHeight;
+		var footer_column_height=150;
+		if ((right_column_height+250)>window.innerHeight) {
+			$('footer').removeClass();
+		};	    	
+    })	    
+	$(window).resize(function(){
+		if ((right_column_height+250)>window.innerHeight) {
+			//alert('ads')
+			$('footer').removeClass('footer');
+		}else{
+			$('footer').addClass('footer');
+		}		
+	})
+
+
+</script>
+</html>

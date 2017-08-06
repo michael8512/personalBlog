@@ -1,0 +1,217 @@
+<html>
+<head>
+<title>注册页面</title>	
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/index/css/bootstrap.css">	
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/index/css/register.css">
+	<script src="__PUBLIC__/static/index/js/register.js"></script>
+	<script src="__PUBLIC__/static/index/js/jquery.js"></script>
+
+	<style>
+		body{
+			background: url('__PUBLIC__/static/index/images/2.jpg');
+			background-size: cover;
+			background-attachment: fixed;
+		}
+		footer{
+			position: absolute;
+			bottom: 0px;
+			width: 100%;
+		}
+		.row{
+			margin-top: 100px;
+		}
+		
+	</style>
+</head>
+
+<body>
+	<div class='container'>
+		<h1 class='page-header' style='color:#fff;font-weight:bold'>用户注册</h1>
+
+		<div class='row'>
+			<div class='col-md-2'></div>
+			<div class='col-md-8' style='padding-top:0px'>
+				<form class='form-horizontal' action='' method='post'>
+					<div class='form-group'>
+						<div class='col-md-3'></div>
+						<div class='col-md-9'>
+							<span id='error' class='label glyphicon glyphicon-warning-sign'>用户名或密码错误</span>
+						</div>
+					</div>
+					<div class='form-group'>
+						<label class='username col-md-3'>用&nbsp;&nbsp;户&nbsp;&nbsp;名</label>
+						<div class='col-md-9'>
+							<input type='text' id='username' class='form-control input' placeholder='username' name='username'>
+							<span  class='help label glyphicon glyphicon-info-sign'>&nbsp;支持字母和数字，3-20个字符</span>
+						</div>			
+					</div>
+					<div class='form-group'>
+						<label class='username col-md-3'>昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称</label>
+						<div class='col-md-9'>
+							<input type='text' id='name' class='form-control input' placeholder='name' name='name'>
+							<span  class='help label glyphicon glyphicon-info-sign'>&nbsp;支持字母和数字，4-20个字符</span>
+						</div>			
+					</div>					
+					<div class='form-group'>
+						<label class='password col-md-3'>设置密码</label>
+						<div class='col-md-9'>
+							<input type='password' id='password' class='form-control input' placeholder='set password' name='password'>
+							<span  class='help label glyphicon glyphicon-info-sign'>&nbsp;建议使用字母和数字等组合，6-20个字符</span>	
+						</div>
+					</div>
+					<div class='form-group'>
+						<label class='password col-md-3'>确认密码</label>
+						<div class='col-md-9'>
+							<input type='password' id='confirmpassword' class='form-control input' placeholder='confirm password' name='confirmpassword'>
+							<span  class='help label glyphicon glyphicon-info-sign'>&nbsp;请再次输入密码</span>	
+						</div>
+					</div>
+					<div class='form-group'>
+						<label class='col-md-3' class='checkcode' style='color:#fff;font-size:20px;'>验&nbsp;&nbsp;证&nbsp;&nbsp;码</label>
+						<div class='col-md-5'>
+							<input type="text" id='checkcode' name="checkcode" class='form-control input' placeholder='checkcode'>
+							<span class='help label glyphicon glyphicon-info-sign'>&nbsp;看不清？点击图片更换验证码</span>	
+						</div>		
+							<div class='col-md-2'><img src="__PUBLIC__/static/index/images/checkCode.php" id='checkCodeImage' onclick="this.src='__PUBLIC__/static/index/images/checkCode.php?a=Math()'"/>
+						</div>
+					</div>
+					<div class='form-group'>
+						<label style='color:#fff;font-size:15px;cursor: pointer;'>
+							&nbsp;&nbsp;<input type='checkbox' name='agreement' value='yes'>&nbsp;&nbsp;我已阅读并同意<a href="">《用户注册协议》</a>
+						</label>	
+					</div>
+					<div class='form-group'>
+						<input type='submit' class='btn btn-danger form-control' value='立即注册'>
+					</div>
+					<div class='form-group'>
+						<label style='color:#fff;font-size:15px;cursor: pointer;line-height:20px;'>
+							<a href="{:url('login/index')}">返回登录页面</a>
+						</label>	
+					</div>					
+				</form>				
+			</div>
+		</div>
+	</div>
+{include file='Public/foot'/}
+</body>
+
+<script>
+	//提示语句
+	$('.input').focus(function(){
+		$(this).next().css({'visibility':'visible'});
+		$(this).attr({'placeholder':''});
+	});
+
+	//正则表达式
+		//username
+		$('#username').blur(function(){
+			value=$(this).val();
+			//先判断输入框内是否为空
+			if (value=="") {
+				$(this).next().css({'visibility':'hidden'});
+				$(this).attr({'placeholder':'username'});
+			}else{
+			//若输入框不为空，则用正则表达式判断输入长度
+				var reg=/[A-Za-z0-9]/g;
+				arr=value.match(reg);
+				if (arr.length<3) {
+					//alert(arr.length);
+					$(this).next().html('&nbsp;用户名长度不得少于3位').css({'visibility':'visible','color':'red'}).removeClass('glyphicon-info-sign').addClass('glyphicon-minus-sign');
+				}else{
+					$(this).next().css({'visibility':'hidden'});
+				}		
+			}
+		});
+		//name
+		$('#name').blur(function(){
+			value=$(this).val();
+			//先判断输入框内是否为空
+			if (value=="") {
+				$(this).next().css({'visibility':'hidden'});
+				$(this).attr({'placeholder':'name'});
+			}else{
+			//若输入框不为空，则用正则表达式判断输入长度
+				var reg=/[A-Za-z0-9]/g;
+				arr=value.match(reg);
+				if (arr.length<4) {
+					//alert(arr.length);
+					$(this).next().html('&nbsp;昵称长度不得少于4位').css({'visibility':'visible','color':'red'}).removeClass('glyphicon-info-sign').addClass('glyphicon-minus-sign');
+				}else{
+					$(this).next().css({'visibility':'hidden'});
+				}		
+			}
+		});		
+		//password
+		$('#password').blur(function(){
+			value=$(this).val();
+			if (value=="") {
+				$(this).next().css({'visibility':'hidden'});
+				$(this).attr({'placeholder':'password'});
+			}else{
+				var reg=/[A-Za-z0-9]/g;
+				arr=value.match(reg);
+				if (arr.length<6) {
+					//alert(arr.length);
+					$(this).next().html('&nbsp;密码长度不得少于6位').css({'visibility':'visible','color':'red'}).removeClass('glyphicon-info-sign').addClass('glyphicon-minus-sign');
+				}else{
+					$(this).next().css({'visibility':'hidden'});
+				}
+			}
+		});
+		//confirmpassword
+		$('#confirmpassword').blur(function(){
+			value1=$(this).val();
+			value2=$('#password').val();
+			if (value1!==value2) {
+				//alert(arr.length);
+				$(this).next().html('&nbsp;两次密码输入不一致').css({'visibility':'visible','color':'red'}).removeClass('glyphicon-info-sign').addClass('glyphicon-minus-sign');
+			}else{
+				$(this).next().css({'visibility':'hidden'});
+				$(this).attr({'placeholder':'confirmpassword'});
+			}
+		});
+		//checkcode
+		$('#checkcode').blur(function(){
+			value=$(this).val();
+			//先判断输入框内是否为空
+			if (value=="") {
+				$(this).next().css({'visibility':'hidden'});
+				$(this).attr({'placeholder':'checkcode'});
+			}
+		});	
+
+	function GetErrno(){
+		var url=location.search;//这里返回'?errno=2'
+		if (url.indexOf('?')!=-1) {
+			var index=url.indexOf('?')+1;
+			strs=url.substr(index);//取出？后传递的所有等式
+			str=strs.split('=');
+		}
+		return str[1];//返回errno的值
+	}
+	
+	var errno=GetErrno();
+
+	function CheckErrno(){
+		if (errno==1) {
+			$('#error').html('&nbsp;未阅读注册协议').css({'visibility':'visible'});
+		}else if (errno==2) {
+			$('#error').html('&nbsp;验证码错误').css({'visibility':'visible'});
+		}else if (errno==3) {
+			$('#error').html('&nbsp;用户名已经存在').css({'visibility':'visible'});
+		}else if (errno==4) {
+			$('#error').html('&nbsp;昵称已经存在').css({'visibility':'visible'});
+		}
+	}
+
+	CheckErrno();
+
+
+
+
+
+
+
+
+</script>
+</html>

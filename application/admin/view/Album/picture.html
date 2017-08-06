@@ -1,0 +1,227 @@
+<!doctype html>
+<html>
+<head><title>相册管理</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/admin/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/admin/css/picture.css">
+	<script src="__PUBLIC__/static/admin/js/jquery.js"></script>
+	<script src="__PUBLIC__/static/admin/js/bootstrap.js"></script>
+	<style>	
+		/*body*/
+			a:hover{
+				font-weight: bold;
+				background: #B3D094;
+				color: #fff;
+			}
+			.footer{
+				position: fixed;
+				bottom: 0px;
+				width: 100%;
+			}
+			.right-column{
+				margin-top: 0px;
+				height: 100%;
+				margin-bottom: 50px;
+			}
+			.operation{
+				color: red;
+			}
+			.operation-dropdown a:hover{
+				background-color: #fff;
+			}
+			.operation{
+				color:blue;
+				visibility: visible;
+			}
+			.next,.prev{
+				background: transparent;
+			}
+			.pic:hover{
+				outline: 3px solid #8EC9EA;
+			}
+
+	</style>
+</head>
+<body style="background-image:url('__PUBLIC__{$bg}');background-size: cover;background-attachment: fixed;">
+
+	<div class='container'>
+		<!--网页导航条-->
+			{include file='Public/top' /}
+
+		<div class='row'>
+			<!--左边侧栏-->
+			{include file='Public/left' /}
+			<!--正文——中间框-->
+			<div class='col-md-10 right-column' id='right-column'>
+				<div class='panel panel-info'>
+					<div class='panel-heading'>
+						<div class='panel-title'>
+							<p>
+								<a href="{:url('Admin/index/index')}">首页</a>>
+								<a href="{:url('index')}">相册管理</a>>
+								<span class='now-page'>图片管理</span>
+								
+							</p>
+						</div>
+					</div>
+					<div class='panel-body'>
+						<p><a href="{:url('album/addpic',array('album'=>$album))}"><b class='glyphicon glyphicon-plus'></b>&nbsp;&nbsp;上传照片</a></p>
+						{volist name='picres' id='vo'}
+						<div class='albumlist'>
+							<div class='col-md-4 pic' style='postion:relative;padding:10px'>
+								<a href="#{$vo.id}" data-toggle="modal"><img src="__PUBLIC__{$vo.pic}" width='100%'></a>
+								<!--下拉菜单，对图片的操作-->
+								<li class='dropdown operation-dropdown' style='list-style:none;position:absolute;top:20px;right:25px;'>
+									<a href="" id='operation-href' class='dropdown-toggle operation-href' data-toggle='dropdown' style=''>
+										<span class='operation glyphicon glyphicon-menu-down' style='' ></span>
+									</a>
+									<ul class='dropdown-menu'>
+										<li><a href="{:url('Album/changeCover',array('id'=>$vo.id,'album'=>$vo.album))}">设为封面</a></li>
+										<li><a href="{:url('Album/changeBg',array('id'=>$vo.id,'album'=>$vo.album))}">设为背景</a></li>
+										<li><a href="{:url('delPicture',array('id'=>$vo.id,'album'=>$vo.album))}">删除照片</a></li>
+										<li name='{$vo.id}' class='del'><a href="javascript:">ajax删除</a></li>
+									</ul>
+								</li>
+							</div>
+						</div>
+						{/volist}
+					</div>
+				</div>
+			</div>
+			<!--modal-->
+			{volist name='picres' id='vo'}
+			<div id='{$vo.id}' class='modal'>
+				<div class='modal-dialog '>
+					<div class='modal-content'>
+						<div class='modal-header'>
+							<span class='close' data-dismiss='modal'>&times;</span>
+							<h3>{$vo.album}</h3>
+						</div>
+						<div class='modal-body'>
+							<div class='carousel silde' id='myphotoalbum_modal'>
+								<div class='carousel-inner'>
+									<div class='item active'>
+										<img src="__PUBLIC__{$vo.pic}" style='height:100%;width:100%' class='pic-preview'>
+
+									</div>	
+								</div>
+								<!--预览照片的左右翻页功能-->
+								<a href="javascript:" class='left carousel-control prev' style='background:transparent;'>
+									<span class='glyphicon glyphicon-chevron-left' album='{$vo.album}' idx="{$vo.id}"></span>
+								</a>
+								<a href="javascript:" class='right carousel-control next' style='background:transparent;'>
+									<span class='glyphicon glyphicon-chevron-right' album='{$vo.album}' idx='{$vo.id}'></span>
+								</a>					
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>	
+			{/volist}
+		</div>
+
+	</div>
+	<!--网页页尾-->
+		{include file='Public/foot' /}
+</body>
+<script type="text/javascript">
+	//照片向后翻页
+	$('.next').click(function(){
+		var id=$(this).children().attr('idx');
+		var album=$(this).children().attr('album');
+		$.ajax({
+			url:"{:url('admin/album/nextPaginate')}",
+			dataType:'json',
+			data:{'id':id,'album':album},
+			type:'POST',
+			success:function(msg){
+				var array=JSON.parse(msg);
+				var next_pic=array['pic'];
+				var next_id=array['id'];
+				//alert($('.item').attr('src'))
+				$('.next').children().attr('idx',next_id);
+				$('.prev').children().attr('idx',next_id);
+				//alert($('.prev').children().attr('idx'))
+				$('.pic-preview').attr('src','__PUBLIC__'+next_pic);
+			}
+		})
+	})
+	//照片向前翻页
+	$('.prev').click(function(){
+		var id=$(this).children().attr('idx');
+		var album=$(this).children().attr('album');
+		$.ajax({
+			url:"{:url('admin/album/prevPaginate')}",
+			dataType:'json',
+			data:{'id':id,'album':album},
+			type:'POST',
+			success:function(msg){
+				var array=JSON.parse(msg);
+				var next_pic=array['pic'];
+				var next_id=array['id'];
+				//alert($('.item').attr('src'))
+				$('.prev').children().attr('idx',next_id);
+				$('.next').children().attr('idx',next_id);
+				$('.pic-preview').attr('src','__PUBLIC__'+next_pic);
+			}
+		})
+	})
+
+	$('.bg').click(function(){
+		var bg=$(this).parent().parent().parent().prev().children().attr('src');
+		//alert($('body').css({background-image:url(bg)}));
+		$('body').css("background-image","url("+bg+")");
+		alert(bg);
+		//$(this).css({background:'#fff'});
+	})
+    //$(document).ready(function(){
+		var right_column_height=document.getElementById('right-column').offsetHeight;
+		var footer_column_height=150;
+		if ((right_column_height+250)>window.innerHeight) {
+			$('footer').removeClass();
+		};	    	
+    //})    
+	$(window).resize(function(){
+		if ((right_column_height+250)>window.innerHeight) {
+			//alert('ads')
+			$('footer').removeClass('footer');
+		}else{
+			$('footer').addClass('footer');
+		}		
+	});
+
+	$('.del').click(function(){
+		var id=$(this).attr('name');
+		//alert(id)
+		var delpic=$(this).parent().parent().parent();
+		//alert(delpic.html())
+		if (confirm('确认要删除吗？')) {
+			/*$.get("{:url('admin/album/delPic')}",{'id':id},function(data){
+				delpic.slideUp();
+			})*/
+			$.ajax({
+				url:"{:url('admin/album/delPic')}",
+				dataType:'json',
+				data:{'id':id},
+				type:'POST',
+				success:function(data){
+					delpic.slideUp();
+				},
+				error:function(data){
+					alert('您提交的信息有误');
+				}
+			})
+		};
+
+	})
+
+	$('.operation-href').hover(
+		function(){
+			$(this).css({visibility:'visible'});
+		},
+		function(){
+			$(this).css({visibility: 'hidden'});
+		}
+	)
+</script>
+</html>

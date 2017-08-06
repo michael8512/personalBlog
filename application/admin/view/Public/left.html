@@ -1,0 +1,27 @@
+<style type="text/css">
+	.left-column{
+		opacity: 0.8;
+		
+	}
+	.left-column .list-group .list-group-item{
+		
+		color: #5A788B;
+		font-size: 15px;
+		/**/
+	}
+	.left-column .list-group a:hover{
+		background: #B3D094;
+		color: #fff;
+		font-weight: bold;
+	}
+
+</style>
+<!--左边侧栏-->
+	<div class='col-md-2 left-column'>
+		<div class='list-group'>
+			<a href="{:url('Admin/index/index')}" class='list-group-item'>Menu</a>
+			<a href="{:url('Admin/diary/index')}" class='list-group-item'>Diary</a>
+			<a href="{:url('Admin/album/index')}" class='list-group-item'>Album</a>
+			<a href="{:url('Admin/article/index')}" class='list-group-item'>Article</a>
+		</div>
+	</div>

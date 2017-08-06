@@ -1,0 +1,243 @@
+<!doctype html>
+<html>
+<head><title>相册管理</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/admin/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/admin/css/album.css">
+	<script src="__PUBLIC__/static/admin/js/jquery.js"></script>
+	<script src="__PUBLIC__/static/admin/js/bootstrap.js"></script>
+	<style>	
+		/*body*/
+			body{
+				/*background-image: url('__PUBLIC__/static/admin/images/2.jpg');*/
+				background-size: cover;
+				background-attachment: fixed;
+			}
+			a:hover{
+				font-weight: bold;
+				background: #B3D094;
+				color: #fff;
+			}
+			.footer{
+				position: fixed;
+				bottom: 0px;
+				width: 100%;
+			}
+
+			.right-column{
+				margin-top: 0px;
+				margin-bottom:50px;
+				height:100%;
+			}
+.album-title{
+				background-color: #5A788B;
+				opacity: 0.9;
+				color: #fff;
+				position:absolute;
+				width:93%;
+				height:60px;
+				left:10px;
+				bottom:0px;
+				margin-bottom: 0px!important;
+				visibility: hidden;
+			}	
+			.ok,.cancel{
+				color: #fff;
+			}	
+
+	</style>
+</head>
+<body style="background-image:url('__PUBLIC__{$bg}');background-size: cover;background-attachment: fixed;">
+
+	<div class='container'>
+		<!--网页导航条-->
+			{include file='Public/top' /}
+
+		<div class='row'>
+			<!--左边侧栏-->
+			{include file='Public/left' /}
+			<!--正文——中间框-->
+			<div class='col-md-10 right-column' id='right-column'>
+				<div class='panel panel-info'>
+					<div class='panel-heading'>
+						<div class='panel-title'>
+							<p>
+								<a href="{:url('Admin/index/index')}">首页</a>>
+								<span class='now-page'>相册管理</span>
+								
+							</p>
+						</div>
+					</div>
+					<div class='panel-body'>
+						<p><a href="{:url('album/add')}"><b class='glyphicon glyphicon-plus'></b>&nbsp;&nbsp;新增相册</a></p>
+						{volist name='albumres' id='vo'}
+						{if condition="$vo.pic neq ''"}
+						<div class='albumlist'>
+							<div class='col-md-4 album' style="width:33%;postion:relative;">
+								<a href="{:url('show',array('album'=>$vo.title))}">
+									{if condition="$vo.pic neq ''"}
+									<img class='album-pic img-thumbnail' src='__PUBLIC__{$vo.pic}' width="100%"/>
+									{/if}
+								</a>
+								<div class='album-title' style="text-align:center;padding-top:5px;postion:positive;bottom:0px;height:100px;">
+									<p class='title' name="{$vo.id}">《<span>{$vo.title}</span>》</p>
+									<p class='title-edit' style='display:none;'>
+										<input type='text' value='' style='color:red;'>
+										<a href="javascript:">
+											<span class='glyphicon glyphicon-ok ok title-ok'></span>
+										</a>
+										<a href="javascript:">
+											<span class='glyphicon glyphicon-repeat cancel title-cancel'></span>
+										</a>										
+									</p>
+									<p style='font-size:15px' class='intro' name="{$vo.id}">{$vo.intro}</p>
+									<p style='font-size:15px;display:none;' class='intro-edit'>
+										<input type='text' value=''  style='color:red;'>
+										<a href="javascript:">
+											<span class='glyphicon glyphicon-ok ok intro-ok'></span>
+										</a>
+										<a href="javascript:">
+											<span class='glyphicon glyphicon-repeat cancel intro-cancel'></span>
+										</a>
+									</p>
+
+									<a class='del' name="{$vo.id}" href="javascript:"><span class='icon glyphicon glyphicon-trash'></span></a>
+									<a class='edit' name="{$vo.id}" href="javascript:"><span class='icon glyphicon glyphicon-pencil'></span></a>
+								</div>
+							</div>
+						</div>
+						{/if}
+						{/volist}
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<!--网页页尾-->
+		{include file='Public/foot' /}
+</body>
+<script type="text/javascript">
+
+	$('.album').each(function(i){
+		$(this).children().hover(
+			function(){
+			//alert($('.title').eq(i).html());
+				$('.album-title').eq(i).css({visibility:'visible'});
+		},
+			function(){
+				$('.album-title').eq(i).css({visibility:'hidden'});
+		}
+
+		)
+	})
+    //$(document).ready(function(){
+		var right_column_height=document.getElementById('right-column').offsetHeight;
+		var footer_column_height=150;
+		if ((right_column_height+250)>window.innerHeight) {
+			$('footer').removeClass();
+		};	    	
+    //})	    
+	$(window).resize(function(){
+		if ((right_column_height+250)>window.innerHeight) {
+			//alert('ads')
+			$('footer').removeClass('footer');
+		}else{
+			$('footer').addClass('footer');
+		}		
+	});
+//删除相册
+$('.del').click(function(){
+	var album=$(this).parent().parent();
+	var id=$(this).attr('name');
+	if (confirm('是否要删除这个相册')) {
+		$.get("{:url('admin/album/delA')}",{'id':id},function(){
+			album.fadeOut();
+		})
+	};
+})
+//修改相册的名称
+$('.title').each(function(i){
+	$(this).click(function(){
+		var title=$('.title').eq(i).children().html();
+		var id=$('.title').eq(i).attr('name');
+
+		$('.title').eq(i).hide();
+		$('.title-edit').eq(i).show();
+		$('.title-edit').eq(i).find('input').val(title);
+		//绑定ok单击提交修改
+		$('.title-ok').click(function(){
+			var retitle=$('.title-edit input').eq(i).val();
+			$.post("{:url('admin/album/editTitle')}",{'id':id,'title':retitle},function(){
+				$('.title-edit').eq(i).hide();
+				$('.title').eq(i).children().html(retitle);
+				$('.title').show();
+			})
+		})
+		//绑定撤销单击事件
+		$('.title-cancel').click(function(){
+			$('.title').eq(i).show();
+			$('.title-edit').eq(i).hide();
+		})		
+	})	
+})
+/*$('.edit').each(function(i){
+	$(this).click(function(){
+		//获取要修改的相册名和相册id
+		var album=$('.edit').eq(i).parent().parent();
+		var title=$('.title').eq(i).children().html();
+		var id=$(this).attr('name');
+
+		//显示修改框
+		$('.title').eq(i).hide();
+		$('.title-edit').eq(i).show();
+		$('.title-edit').eq(i).find('input').val(title);
+		//绑定ok单击提交修改
+		$('.title-ok').click(function(){
+			//重新获取要修改的标题
+			var retitle=$('.title-edit input').eq(i).val();
+			$.post("{:url('admin/album/editA')}",{'id':id,'title':retitle},function(){
+				$('.title-edit').eq(i).hide();
+				$('.title').eq(i).children().html(retitle);
+				$('.title').show();
+			})
+		})
+		//绑定撤销单击事件
+		$('.title-cancel').click(function(){
+			$('.title').eq(i).show();
+			$('.title-edit').eq(i).hide();
+		})
+
+	})
+})*/
+//修改相册介绍
+$('.intro').each(function(i){
+	$(this).click(function(){
+		var intro=$('.intro').eq(i).html();
+		var id=$('.intro').eq(i).attr('name');
+
+		$('.intro').eq(i).hide();
+		$('.intro-edit').eq(i).show();
+		$('.intro-edit').eq(i).find('input').val(intro);
+		//绑定ok单击提交修改
+		$('.intro-ok').click(function(){
+			var reintro=$('.intro-edit input').eq(i).val();
+			$.post("{:url('admin/album/editIntro')}",{'id':id,'intro':reintro},function(){
+				$('.intro-edit').eq(i).hide();
+				$('.intro').eq(i).html(reintro);
+				$('.intro').show();
+			})
+		})
+		//绑定撤销单击事件
+		$('.intro-cancel').click(function(){
+			$('.intro').eq(i).show();
+			$('.intro-edit').eq(i).hide();
+		})		
+	})	
+})
+
+
+</script>
+
+</html>

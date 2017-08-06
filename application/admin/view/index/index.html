@@ -1,0 +1,499 @@
+<!doctype html>
+<html>
+<head><title>主页管理</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/admin/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/admin/css/index.css">
+
+	<script src="__PUBLIC__/static/admin/js/jquery.js"></script>
+	<script src="__PUBLIC__/static/admin/js/bootstrap.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/admin/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/admin/ueditor/ueditor.all.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/admin/ueditor/lang/zh-cn/zh-cn.js"></script>	
+	<style>	
+		/*body*/
+			.footer{				
+				position: fixed;
+				bottom: 0px;
+				width: 100%;
+				clear: both;
+				
+			}
+			.right-column{
+				/*border: 1px red solid;*/
+				margin-bottom: 50px;
+				height: 100%;
+			}
+			.btn{
+				float: right!important;
+			}
+
+			.personal_view,.personal_edit p{
+				text-indent:2em;
+			}
+			.personal_view{
+				line-height: 27px;
+			}
+			.personal_edit,.keep{
+				display: none;
+			}
+				.div_user_up{
+					/*height: 100%;
+					position: relative;*/
+				}
+				#head{
+					/*width: 100px;
+					margin-left: 78px;*/	
+					border: 5px solid #FFFFFF;
+					margin: 0 auto;
+					display: block;
+					cursor: pointer;
+				}
+				/*下界面*/
+				.div_user_down{
+					height: 73px;
+				}
+				.div_user_resouce{
+					padding: 15px;
+					text-align: center;
+					font-weight: bold;
+					line-height: 15px;
+
+				}
+				/*.pic{
+					border: 2px solid red;
+				}
+				.pic img{
+					width: 33%;
+				}*/			
+				.b-img{
+					vertical-align: middle;
+					text-align: center;
+				}
+				.b-img,.s-img{
+					background:#F2F2F5;
+					height:490px;
+					/*border: 2px solid red;*/
+				}
+				.pre-page{
+					cursor: pointer;
+					color: blue;
+				}
+
+				.pic-preview,.div_head{
+					text-align: center;
+					padding: 0px;
+					overflow: hidden;
+					border: 2px solid red;
+				}
+				.pic-size{
+					text-align: center;
+				}
+		/*.head-preview{
+			width: 120px;
+		    height: 120px;
+		    background: #7fee1d;
+		    -moz-border-radius: 60px;
+		    -webkit-border-radius: 60px;
+		    border-radius: 60px;
+		}*/
+	</style>
+</head>
+<body style="background-image:url('__PUBLIC__{$bg}');background-size: cover;background-attachment: fixed;">
+
+	<div class='container'>
+		<!--网页导航条-->
+			{include file='Public/top' /}
+
+		<div class='row content'>
+				
+<!--用户头像和个人信息-->
+<div class='div_user' style="">
+	<!--用户头像-->
+	<div class='div_user_up' style=''>
+		<div class='div_head' style='width:150px;height:150px;border-radius:75px;margin:0 auto;'>
+			<img id='head' src="__PUBLIC__{$person.head}" data-toggle="modal" data-target="#modal-user" class='head' alt="跟换头像" style='width:120%;margin-top:-10px;margin-left:-10px;'/>
+		</div>
+	</div>
+	<!--用户昵称和座右铭-->
+	<div class='div_user_down' style="height:100px;color:#fff">
+		<div class='div_user_resouce'>
+			<p style="margin-top:0px;">
+					<span class='glyphicon glyphicon-user'></span>
+					<span class='nickname'><?php echo session('name'); ?><span>
+			</p>
+			<p style='font-size:15px' class='motto' idx="{$person.id}">{$person.motto}</p>
+			<p style='font-size:15px;display:none;' class='motto-edit'>
+				<input type='text' value='' style='color:red;'>
+				<a href="javascript:">
+					<span class='glyphicon glyphicon-ok ok motto-ok'></span>
+				</a>
+				<a href="javascript:">
+					<span class='glyphicon glyphicon-repeat motto-cancel'></span>
+				</a>
+			</p>
+		</div>
+	</div>
+</div>
+<!--跟换用户头像-->
+<div class='modal fade' id='modal-user'>
+	<div class='modal-dialog'>
+		<div class='modal-content'>
+			<form action='' method='post' enctype='multipart/form-data'>
+				<div class='modal-header'>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        		<h4 class="modal-title">设置头像</h4>
+				</div>
+				<div class='modal-body'>
+					<div class='choose-pic' id='#choose-pic' style='text-align:center;font-size:15px;'>
+						<label class='choose-btn label label-info local-pic' style='font-size:15px;cursor: pointer;'>本地上传</label>
+						<label class='choose-btn label label-info personal-pic' style='font-size:15px;cursor: pointer;'>个人相册</label>
+					</div>
+
+					<!--本地上传-->
+					<div class='modal-head local-pic-panel' style='margin-top:20px;'>
+						<!--大缩略图-->
+						<div class='b-img' id='b-img' style="padding:10px;float:left;width:70%">
+							<div class='pic-preview b-pic-preview' style='width:360px;height:360px;'>
+								<img src="__PUBLIC__{$person.head}" style='b' class='headpreview b-headpreview'>
+							</div>
+							<a href=""><input type='file' class='file' name='head' style='margin-left:70px;margin-top:40px;'></a>
+							<!--隐藏表单-->
+							<input type='hidden' name='localpic' class='localpic' value=''>
+						</div>
+						<!--小缩略图-->	
+						<div class='s-img' style='float:right;margin-left:10px;width:28%;'>
+							<div class='preview'>预览</div>
+							<div class='pic-preview' style='width:150px;height:150px;border-radius:75px;'>
+								<img id='head' src="__PUBLIC__{$person.head}" class='headpreview' style='width:120%;margin-top:-25px;margin-left:-10px;' >
+							</div>
+							<p class='pic-size'>150x150px</p>
+
+							<div class='pic-preview' style='width:100px;height:100px;border-radius:50px;margin-left:30px;'>
+								<img id='head' src="__PUBLIC__{$person.head}" class='headpreview' style='width:120%;margin-top:-15px;margin-left:-10px;' >
+							</div>
+							<p class='pic-size'>100x100px</p>
+
+							<div class='pic-preview' style='width:80px;height:80px;border-radius:40px;margin-left:40px;'>
+								<img id='head' src="__PUBLIC__{$person.head}" class='headpreview' style='width:120%;margin-top:-10px;margin-left:-10px;border:2px solid red;' >
+							</div>
+							<p class='pic-size'>80x80px</p>
+						</div>
+					</div>
+					<!--个人相册-->
+					<div class='modal-head personal-pic-panel' style='margin-top:20px;display:none'>
+						<div class='catalog'>
+							<p>
+								<span class='now-page'>所有相册</span>
+							</p>
+						</div>
+						{volist name='albumres' id='vo'}
+						{if condition="$vo.pic neq ''"}
+						<div class='albumlist'>
+							<div class='col-md-4 album' style="width:33%;padding:0px;">
+								<!--<a href="{:url('admin/index/show',array('album'=>$vo.title))}">-->
+								<a href="javascript:">
+									{if condition="$vo.pic neq ''"}
+									<img class='album-pic img-thumbnail' name="{$vo.title}" src='__PUBLIC__{$vo.pic}' width="100%"/>
+									{/if}
+								</a>
+								<div class='album-title' style="text-align:center;height:40px;">
+									<p class='title' style='padding:0px'>《{$vo.title}》</p>
+								</div>
+							</div>
+						</div>
+						{/if}
+						{/volist}
+					</div>
+					<!--相册照片预览-->
+					<div class='modal-head personal-pic-show-panel' style='margin-top:20px;display:none'>
+						<div class='catalog'>
+							<p>
+								<span class='pre-page' style='cursor: pointer;'>所有相册</span>>
+								<span class='now-page'>相册管理</span>
+							</p>
+						</div>						
+						<div class='piclist' style=''>
+
+						</div>
+						
+					</div>					
+				</div>
+				<div class='modal-footer'>
+					<input type='reset' id='reupload' value='重新上传' class='reupload' style='float:left'>
+					<input type='submit' value='确认上传' class='upload'>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>		
+			<!--左边侧栏-->
+			{include file='Public/left' /}
+			<!--正文——中间框-->
+			<div class='col-md-10 right-column' id='right-column'>
+
+
+				<div class='panel panel-info'>
+					<div class='panel-heading'>
+						<div class='panel-title'>
+							<p>
+								<span class='now-page'>首页</span>
+							</p>
+						</div>
+					</div>
+					<div class='panel-body'>
+						<div class='quick-add'>
+							<h4 class='title'>快捷操作</h4>
+							<a href="{:url('article/add')}" class='quick-column'><span class='glyphicon glyphicon-book'></span>新增文章</a>
+							<a href="{:url('diary/add')}" class='quick-column'><span class='glyphicon glyphicon-pencil'></span>新增说说</a>
+							<a href="{:url('album/addpic')}" class='quick-column'><span class='glyphicon glyphicon-picture'></span>新增照片</a>
+							
+						</div>
+						<div class='xitong'>
+							<h4 class='title'>系统基本信息</h4>
+							<table class='table'>
+								<tr><td>操作系统</td><td><?php echo php_uname('s');?></td></tr>
+								<tr><td>运行环境</td><td><?php echo apache_get_version();?></td></tr>
+								<tr><td>PHP版本</td><td><?php echo PHP_VERSION;?></td></tr>
+								<tr><td>PHP运行方式</td><td><?php echo php_sapi_name();?></td></tr>
+								<tr><td>上传附件限制</td><td>20MB</td></tr>
+								<tr><td>当前时间</td><td><?php echo date('Y年m月d日 H:i:s'); ?></td></tr>
+								<tr><td>服务器域名/IP</td><td><?php echo $_SERVER['SERVER_NAME'].'&nbsp;['.GetHostByName($_SERVER['SERVER_NAME']).']'; ?></td></tr>
+							</table>
+						</div>
+						<div class='help'>
+							<form action='' method='post' enctype="multipart/form-data">
+							<fieldset>
+								<legend class='title'>基本信息</legend>
+								<div class='btn'>
+									<a href="javascript:" class='edit label label-info'>编辑</a>
+									<input type='submit' class='keep label label-info' value='保存'>
+								</div>
+
+								<div class='personal_view'>
+									<p class='personal' >姓名：<span>{$person.realname}</span></p>
+									<p class='personal' >性别：<span>{$person.sex}</span></p>
+									<p class='personal' >年龄：<span>{$person.age}</span></p>
+									<p class='personal' >邮箱：<span>{$person.email}</span></p>
+									<p class='personal' >头像：
+										<span>
+										{if condition="$person.head neq ''"}
+											<img class='img-thumbnail' src="__PUBLIC__{$person.head}" width='100px' data-toggle='modal' data-target="#modal-user" style='cursor:pointer' name='{$person.head}'>
+										{else/}
+											未上传头像
+										{/if}
+										</span>
+									</p>
+								</div>
+								<div class='personal_edit'>
+									<p class='personal' >姓名：<input type='text' name='realname' value=''></p>
+									<p class='personal' >性别：<input type='text' name='sex' value=''></p>
+									<p class='personal' >年龄：<input type='text' name='age' value=''></p>
+									<p class='personal' >邮箱：<input type='text' name='email' value=''></p>
+									<p class='personal' >头像：<input type='file' name='head' value='头像上传'/></p>
+								</div>
+							</fieldset>	
+							</form>							
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+	<!--网页页尾-->
+		{include file='Public/foot' /}
+</body>
+<script type="text/javascript">
+
+    //$(document).ready(function(){
+		var right_column_height=document.getElementById('right-column').offsetHeight;
+		var footer_column_height=150;
+		if ((right_column_height+250)>window.innerHeight) {
+			$('footer').removeClass();
+		};	
+
+    //})    
+	$(window).resize(function(){
+		if ((right_column_height+250)>window.innerHeight) {
+			//alert('ads')
+			$('footer').removeClass('footer');
+		}else{
+			$('footer').addClass('footer');
+		}		
+	});
+	//修改座右铭
+	$('.motto').click(function(){
+		//获取座右铭
+		var motto=$(this).html();
+		var id=$(this).attr('idx');
+		$(this).hide();
+		$('.motto-edit').show();
+		$('.motto-edit input').val(motto);
+
+		//ok单击提交
+		$('.motto-ok').click(function(){
+			//获取新的motto
+			var remotto=$('.motto-edit input').val();
+			$.post("{:url('admin/index/editMotto')}",{'id':id,'motto':remotto},function(){
+				$('.motto-edit').hide();
+				$('.motto').show();
+				$('.motto').html(remotto);
+				//alert('asd')
+			});			
+		});
+		//cancel单击撤销
+		$('.motto-cancel').click(function(){
+			$('.motto').show();
+			$('.motto-edit').hide();
+		})
+
+		
+	})
+	//跟换头像
+	$('#head').hover(
+		function(){
+			$('.div_head').css({border:'5px solid #fff'})
+			$(this).css('width','130%')
+		},
+		function(){
+			$('.div_head').css({border:'2px solid red'})
+			$(this).css('width','120%')
+		}
+	);	
+	//显示所有相册页面
+	$('.pre-page').click(function(){
+		$('.personal-pic-show-panel').hide();
+		$('.personal-pic-panel').show();
+	})
+	//本地上传和个人相册上传
+	$('.local-pic').click(function(){
+		$(this).css('background','red');
+		$('.person-pic').css('background','#5BC0DE');
+		$('.personal-pic-panel').hide();
+		$('.local-pic-panel').show();
+		$('.personal-pic-show-panel').hide();
+	})
+	$('.personal-pic').click(function(){
+		$(this).css('background','red');		
+		$('.local-pic').css('background','#5BC0DE');		
+		$('.local-pic-panel').hide();
+		$('.personal-pic-panel').show();
+		$('.personal-pic-show-panel').hide();
+	})
+	//单击选中相册后列出该相册的所有照片
+	$('.album-pic').click(function(){
+		$('.personal-pic-panel').hide();
+		$('.personal-pic-show-panel').show();
+		var title=$(this).attr('name');
+
+		$.ajax({
+			url:"{:url('admin/index/show')}",
+			dataType:'json',
+			data:{'title':title},
+			type:'POST',
+			success:function(msg){
+				//var array=msg.array;
+				var array=JSON.parse(msg);
+				//alert(array.length)
+				var pic=new Array();
+				var thumbnail=new Array();
+				var idx=new Array();
+				for(var i=0;i<array.length;i++){
+				    for(var key in array[i]){
+				        pic[i]=array[i].pic;
+				        thumbnail[i]=array[i].thumbnail;
+				        idx[i]=array[i].id;
+				    }
+				}
+				//先删除piclist中的所有img，然后再重新添加需要预览的照片
+				$('.piclist img').remove();
+
+				for (var i = 0; i < pic.length; i++) {
+					$('.piclist').append("<img src=\'__PUBLIC__"+pic[i]+"\' class=\'img-thumbnail pic-show\' idx=\'"+idx[i]+"\' style='margin:9px;cursor:pointer;' width='30%'>");
+
+						//从个人相册中选择照片后，上传作为头像
+						$('.pic-show').eq(i).click(function(){
+							var headpic=$(this).attr('src');
+							var id=$(this).attr('idx');
+							//alert(headpic);
+							$('.personal-pic-show-panel').hide();
+							$('.local-pic-panel').show();
+							
+							
+							$('.headpreview').attr('src',headpic);
+							//调整图片的缩放
+							var b_image=$('.b-headpreview');
+
+							var ratio=0;
+							var width=b_image.width();
+							var height=b_image.height();
+							//alert('width='+width+', height='+height)
+							var w_ratio=360/width;
+							var h_ratio=360/height;
+							//alert('w_ratio='+w_ratio+', h_ratio='+h_ratio)
+							if (w_ratio<h_ratio) {
+								ratio=w_ratio;
+							}else{
+								ratio=h_ratio;
+							}
+
+							width=width*ratio;
+							height=height*ratio;
+							//alert('ratio='+ratio+', width='+width+', height='+height)
+							b_image.css('height',height);
+							b_image.css('width',width);
+							width=0;
+							height=0;
+							$('.headpreview').attr('idx',id);
+						})
+				};
+			},
+			error:function(msg){
+				alert('您提交的信息有误');
+			}
+		})
+	})
+	//重新上传
+	$('.reupload').click(function(){
+		$('.b-img img').attr('src','')
+	})
+	//个人相册上传
+	$('.upload').click(function(){
+		//先获取所选择的缩略图的路径
+		var id=$('.headpreview').eq(0).attr('idx')
+
+		$('.localpic').val(id)
+		//alert($('.localpic').val())
+	})
+
+	//修改资料
+	var n=1;
+	$('.btn').click(
+		function(){
+			if (2-n>0) {
+				$('.edit').hide();
+				$('.keep').show();
+				$('.personal_view').hide();
+				$('.personal_edit').show();
+				$('.personal_edit input').eq(0).val($('.personal_view span').eq(0).html());
+				$('.personal_edit input').eq(1).val($('.personal_view span').eq(1).html());
+				$('.personal_edit input').eq(2).val($('.personal_view span').eq(2).html());
+				$('.personal_edit input').eq(3).val($('.personal_view span').eq(3).html());
+				$('.personal_edit input').eq(4).val($('.personal_view span').eq(4).attr('name'));
+				n++;
+			}else{
+				$('.keep').hide();
+				$('.edit').show();
+				$('.personal_edit').hide();
+				$('.personal_view').show();				
+				n--;
+			}
+		}
+	)
+
+
+
+</script>
+</html>

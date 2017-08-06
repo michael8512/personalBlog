@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head><title>相册管理</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/admin/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/admin/css/article.css">
+	<script src="__PUBLIC__/static/admin/js/jquery.js"></script>
+	<script src="__PUBLIC__/static/admin/js/bootstrap.js"></script>
+	<style>	
+		/*body*/
+			body{
+				background: url('__PUBLIC__/static/admin/images/2.jpg');
+				background-size: cover;
+				background-attachment: fixed;
+			}
+			a:hover{
+				font-weight: bold;
+				background: #B3D094;
+				color: #fff;
+			}
+			.footer{
+				position: fixed;
+				bottom: 0px;
+				width: 100%;
+				border:3px solid red;
+			}
+			.right-column{
+				margin-top: 0px;
+				margin-bottom:500px;
+				border: 1px solid red;
+				height:750px;
+			}
+
+	</style>
+</head>
+<body>
+
+	<div class='container'>
+		<!--网页导航条-->
+			{include file='Public/top' /}
+
+		<div class='row'>
+			<!--左边侧栏-->
+			{include file='Public/left' /}
+			<!--正文——中间框-->
+			<div class='col-md-10 right-column'>
+				<div class='panel panel-info'>
+					<div class='panel-heading'>
+						<div class='panel-title'>
+							<p>
+								<a href="">首页</a>>
+								<a href="{:url('index')}">相册管理</a>
+								<span class='now-page'>图片管理</span>
+								
+							</p>
+						</div>
+					</div>
+					<div class='panel-body'>
+						<p><a href="{:url('album/addpic',array('album'=>$album))}"><b class='glyphicon glyphicon-plus'></b>&nbsp;&nbsp;上传照片</a></p>
+						{volist name='picres' id='vo'}
+						<div class='albumlist'>
+							<div class='col-md-4'>
+								<a href="#{$vo.id}" data-toggle="modal"><img src="__PUBLIC__{$vo.pic}" width='100%'></a>
+							</div>
+						</div>
+						{/volist}
+					</div>
+				</div>
+			</div>
+			<!--modal-->
+			{volist name='picres' id='vo'}
+			<div id='{$vo.id}' class='modal'>
+				<div class='modal-dialog '>
+					<div class='modal-content'>
+						<div class='modal-header'>
+							<span class='close' data-dismiss='modal'>&times;</span>
+							<h3>{$vo.album}</h3>
+						</div>
+						<div class='modal-body'>
+							<div class='carousel silde' id='myphotoalbum_modal'>
+								<div class='carousel-inner'>
+									<div class='item active'>
+										<img src="__PUBLIC__{$vo.pic}" style='height:100%;width:100%'>
+									</div>	
+								</div>								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>	
+			{/volist}
+		</div>
+
+	</div>
+	<!--网页页尾-->
+		{include file='Public/foot' /}
+</body>
+
+</html>

@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+<head><title>个人网页</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/index/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/index/css/myweb.css">
+	<script src="__PUBLIC__/static/index/js/jquery.js"></script>
+	<script src="__PUBLIC__/static/index/js/bootstrap.js"></script>
+	<script src="__PUBLIC__/static/index/js/holder.js"></script>
+	<script src="__PUBLIC__/static/index/js/docs.min.js"></script>
+	<script src="__PUBLIC__/static/index/js/AjaxRequest.js"></script>
+	<style>	
+		/*body*/
+			body{
+				background: url('__PUBLIC__/static/index/images/1.jpg');
+				background-size: cover;
+				background-attachment: fixed;
+				/*background-repeat: no-repeat;*/
+				/*background-position: top center;*/
+			}
+			a:hover{
+				font-weight: bold;
+				background: #5A788B;
+				color: #fff;
+			}
+			.list-group{
+				border-radius: 30px;
+			}
+			.list-group a{
+				text-align: center;
+			}
+			.list-group a:hover{
+				background-color: #ACC792;
+				color: #fff;
+			}
+
+	</style>
+</head>
+<body>
+
+	<div class='container'>
+		<!--网页导航条-->
+			{include file='Public/top' /}
+
+		<div class='row'>
+
+			<!--正文——中间框-->
+			<div class='col-md-12 web-middle' id='content-column'>
+				<!--个人Article信息栏-->
+					<div id='Panel' idx='Article' class='panel' style='margin-top:20px'>
+						<div class='panel-heading' style='background:#8DABAF'>
+							<div class='panel-title'>
+								<h2 style='color:#fff;font-weight:bold'>My Articles</h2>
+							</div>
+						</div>
+						<div class='panel-body' style='padding:0px'>
+							{volist name='artres' id='vo'}
+							<div class='panel panel-default' style='margin:10px;position:relative'>
+								<div class='panel-heading'>
+									<div class='panel-title'>
+										<h4>{$vo.title}<span style='float:right'>{$vo.time|date='Y年m月d日',###}</span></h4>
+									</div>
+								</div>
+								<div class='panel-body'>
+									<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$vo.intro}<a href="">...</a></p>
+									{if condition="$vo.pic neq '' "}
+									<img src="__PUBLIC__{$vo.pic}" width='90%'>
+									{/if}
+								</div>
+								<div class='panel-footer'>
+									<span class='label label-info'><span class='glyphicon glyphicon-user'>&nbsp;<b>{$vo.name}</b></span></span>
+									<span style='float:right'>
+										<span>浏览：{$vo.click}</span>
+										<span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+										<a href="">阅读全文></a>
+									</span>
+								</div>
+							</div>
+							{/volist}	
+						</div>
+						<div class='panel-footer artlist-footer'>
+							<div style='text-align:center'><a href='' style='text-align:center'>更多&nbsp;...</a></div>
+						</div>						
+					</div>
+
+			</div>
+		</div>
+
+	</div>
+	<!--网页页尾-->
+		{include file='Public/foot' /}
+</body>
+<script>
+	$(document).ready(function(){		
+		//alert('asd')
+	})
+	//回到顶部
+		$('.top').click(function(){
+			$(window).scrollTop(0);
+		})
+	//footer的设置
+    $(window).ready(function(){
+		var right_column_height=document.getElementById('right-column').offsetHeight;
+		var footer_column_height=150;
+		if ((right_column_height+250)>window.innerHeight) {
+			$('footer').removeClass();
+		};	    	
+    })    
+	$(window).resize(function(){
+		if ((content_column_height+250)>window.innerHeight) {
+			//alert('ads')
+			$('footer').removeClass('footer');
+		}else{
+			$('footer').addClass('footer');
+		}		
+	})
+
+</script>
+</html>

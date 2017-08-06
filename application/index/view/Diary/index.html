@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head><title>个人说说</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/index/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/index/css/diary-index.css">
+	<script src="__PUBLIC__/static/index/js/jquery.js"></script>
+	<script src="__PUBLIC__/static/index/js/bootstrap.js"></script>
+	<script src="__PUBLIC__/static/index/js/holder.js"></script>
+	<script src="__PUBLIC__/static/index/js/docs.min.js"></script>
+	<script src="__PUBLIC__/static/index/js/AjaxRequest.js"></script>
+	<style>	
+		/*body*/
+			body{
+				background: url('__PUBLIC__/static/index/images/1.jpg');
+				background-size: cover;
+				background-attachment: fixed;
+			}
+			.footer{				
+				position: fixed;
+				bottom: 0px;
+				width: 100%;
+				clear: both;
+			}
+
+	</style>
+</head>
+<body>
+
+	<div class='container'>
+		<!--网页导航条-->
+			{include file='Public/top' /}
+
+		<div class='row' class='content-column' id='content-column'>
+			<!--Diary列表-->
+			<div class='diarylist'>
+				<h1 class='diarylist-heading'>所有说说：</h1>
+				<hr>
+				{volist name='diaryres' id='vo'}
+					<div id='myDiary' class='panel' style='margin:10px;position:relative;border-radius:5px'>
+						<div class='panel-heading'>
+							<div class='panel-title'>
+								<div class='dropdown' style='float:right;position:absolute;top:2px;right:15px;'>
+									<a href='' class='dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-chevron-down'></span></a>
+									<ul class='dropdown-menu'>
+										<li><a href=''>置顶</a></li>
+										<li><a href='' class='hide-diary'>隐藏</a></li>
+										<li><a href='{:url('index/del',array('time'=>$vo.time))}' class='del'>删除</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class='panel-body'>
+							<p class='myDiary'>{$vo['diary']}</p>
+						</div>
+						<div class='panel-footer'>
+							<span class='label label-info'><span class='glyphicon glyphicon-user'>&nbsp;<b>{$vo['name']}</b></span></span>
+							<span class='label label-success time-label'>{$vo.time|date='Y-m-d H:i:s',###}</span>
+							<div style='float:right'>
+								<span class='comment label label-info btn'>
+									<span class='glyphicon glyphicon-comment'></span>
+								</span>
+								&nbsp;
+								<a href="{:url('index/addgood',array('time'=>$vo.time,'good'=>$vo.good))}" class='label label-danger btn good'>
+									<span class='glyphicon glyphicon-thumbs-up'></span>
+									<span class='good-count'>{$vo['good']}</span>
+								</a>
+							</div>					
+						</div>
+					</div>			
+				{/volist}			
+			</div>
+		</div>
+
+	</div>
+	<!--网页页尾-->
+		{include file='Public/foot' /}
+</body>
+<script>
+	$(document).ready(function(){		
+		//alert('asd')
+	})
+	//footer的设置
+    //$(document).ready(function(){
+		var content_column_height=document.getElementById('content-column').offsetHeight;
+		var footer_column_height=150;
+		if ((content_column_height+250)>window.innerHeight) {
+			$('footer').removeClass();
+		};	    	
+    //})	    
+	$(window).resize(function(){
+		if ((content_column_height+250)>window.innerHeight) {
+			//alert('ads')
+			$('footer').removeClass('footer');
+		}else{
+			$('footer').addClass('footer');
+		}		
+	})
+</script>
+</html>

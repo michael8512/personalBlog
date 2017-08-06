@@ -1,0 +1,90 @@
+<style type="text/css">
+	.navbar{
+		background: #5A788B;
+	}
+	.navbar-brand{
+		font-weight: bold;
+		color: #B3D094;
+	}
+	.navbar-toggle{
+		background: #B3D094;
+	}
+	.icon-bar{
+		background: #5A788B;
+	}
+</style>
+<!--网页导航条-->
+<nav class='navbar navbar-fixed-top'>
+	<div class='container'>
+		<div class='container-fluid'>
+			<div class='navbar-header'>
+				<a href="{:url('Index/index/index')}" class='navbar-brand'>LSH</a>
+				<button type='button' class='navbar-toggle collapsed' data-toggle='collapse' data-target='#mynavbar'>
+					<span class='icon-bar'></span>
+					<span class='icon-bar'></span>
+					<span class='icon-bar'></span>
+				</button>
+			</div>
+			<div id='mynavbar' class='collapse navbar-collapse'>
+				<ul class='nav navbar-nav'>
+					<li class='active'><a href="{:url('Admin/index/index')}"><font color='#B3D094'>Personal</font></a></li>
+					<li class='dropdown'>
+						<a href="" id='home' class='dropdown-toggle' data-toggle='dropdown'><font color='#B3D094'>Home<span class='caret'></span></font></a>
+						<ul class='dropdown-menu'>
+							<li><a href="{:url('Admin/diary/index')}">Diary</a></li>
+							<li><a href="{:url('Admin/album/index')}">Albums</a></li>
+							<li><a href="{:url('Admin/article/index')}">Article</a></li>
+						</ul>
+					</li>
+					<li class=''><a href=""><font color='#B3D094'>Friends</font></a></li>
+					<li class=''><a href=""><font color='#B3D094'>Game</font></a></li>
+				</ul>
+
+				<ul class='nav navbar-nav navbar-right'>
+					<li>
+						<a href=""><span style='color:#B3D094;borderRight:1px red solid'>帮助中心&nbsp;|</span></a>
+					</li>
+					<li>
+						<a href=""><span style='color:#B3D094'>反馈中心&nbsp;|</span></a>
+					</li>
+					<li class='dropdown'>
+						<a href="" id='envelope' class='dropdown-toggle' data-toggle='dropdown' >
+							<span class='glyphicon glyphicon-envelope' style='color:#B3D094' ></span>
+						</a>
+						<ul class='dropdown-menu'>
+							<li><a href="">@我</a></li>
+							<li><a href="">评论</a></li>
+							<li><a href="">赞</a></li>
+							<li class='divider'></li>
+							<li><a href="">私信</a></li>
+							<li><a href="">未成年人私信</a></li>
+						</ul>
+					</li>							
+					<li>
+						<a href="{:url('login/loginOut')}" title='退出'><span class='glyphicon glyphicon-log-out' style='color:#B3D094'></span></a>
+					</li>
+					<li class='dropdown'>
+						<a href="" id='cog' class='dropdown-toggle' data-toggle='dropdown' >
+							<span class='glyphicon glyphicon-cog' style='color:#B3D094' ></span>
+						</a>
+						<ul class='dropdown-menu'>
+							<li><a href="">修改资料</a></li>
+							<li><a href="">空间设置</a></li>
+							<li><a href="">权限设置</a></li>
+							<li><a href="">安全防护</a></li>
+						</ul>
+					</li>
+
+				</ul>	
+
+				<form class='navbar-form navbar-left'>
+					<div class='form-group'>
+						<input type='text' class='form-control' size='10' placeholder='Search'>
+						<button class='btn btn-success'><span class='glyphicon glyphicon-search'></span></button>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+</nav>
